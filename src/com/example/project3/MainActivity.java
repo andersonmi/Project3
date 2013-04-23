@@ -152,7 +152,7 @@ public class MainActivity extends Activity {
        if (initLon == 0) initLon = longitude;
        
        //Send to drawing to draw
-       drawingView.addStroke(latitude-initLat, longitude-initLon);
+       //drawingView.addStroke(latitude-initLat, longitude-initLon);
        
        setUI();
        
