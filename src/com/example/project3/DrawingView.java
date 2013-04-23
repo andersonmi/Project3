@@ -1,201 +1,131 @@
 package com.example.project3;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 public class DrawingView extends View {
-	//guessing mode
-	private boolean editable = true;
 	
 	/**
-	 * The current drawing
-	 */
-	private Drawing drawing;
-	
-	private static final String STROKE = "stroke";
-	
-	/**
-	 * The current drawing
-	 */
-	private Stroke stroke;
-	
-	/**
-	 * Paint to use when drawing
-	 */
-	transient private Paint drawingPaint;
-
-	/**
-	 * First touch status
-	 */
-	private Touch touch1 = new Touch();
-
-	/**
-	 * Second touch status
-	 */
-	private Touch touch2 = new Touch();
-	
-	private class Touch {
-	    /**
-	     * Touch id
-	     */
-	    public int id = -1;
-	    
-	    /**
-	     * Current x location
-	     */
-	    public float x = 0;
-	    
-	    /**
-	     * Current y location
-	     */
-	    public float y = 0;  
-	    
-	    /**
-	     * Previous x location
-	     */
-	    public float lastX = 0;
-	    
-	    /**
-	     * Previous y location
-	     */
-	    public float lastY = 0;
-	    
-	    /**
-	     * Copy the current values to the previous values
-	     */
-	    public void copyToLast() {
-	        lastX = x;
-	        lastY = y;
-	    }
-	    
-	    /**
-	     * Change in x value from previous
-	     */
-	    public float dX = 0;
-	    
-	    /**
-	     * Change in y value from previous
-	     */
-	    public float dY = 0;
-	    
-	    /**
-	     * Compute the values of dX and dY
-	     */
-	    public void computeDeltas() {
-	        dX = x - lastX;
-	        dY = y - lastY;
-	    }
-	}
-	
-	/**
-     * The actual class that does all the finger hand drawings
-     * 
+     * Local class to handle the touch status for one touch.
+     * We will have one object of this type for each of the 
+     * two possible touches.
      */
-	private static class Drawing implements Serializable{
-		
-		 /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		/**
-         * X location of drawing
+    private class Touch {
+        /**
+         * Touch id
          */
-        public float X = 0;
+        public int id = -1;
         
         /**
-         * Y location of drawing
+         * Current x location
          */
-        public float Y = 0;
+        public float x = 0;
         
         /**
-         * Drawing scale
+         * Current y location
          */
-        public float scale = 1;
+        public float y = 0;
         
         /**
-         * Drawing angle
+         * Previous x location
          */
-        public float angle = 0;
+        public float lastX = 0;
         
-        boolean manipulateDrawing = false;
-	}
+        /**
+         * Previous y location
+         */
+        public float lastY = 0;
+        
+        /**
+         * Change in x value from previous
+         */
+        public float dX = 0;
+        
+        /**
+         * Change in y value from previous
+         */
+        public float dY = 0;
+        
+        /**
+         * Copy the current values to the previous values
+         */
+        public void copyToLast() {
+            lastX = x;
+            lastY = y;
+        }
+        
+        /**
+         * Compute the values of dX and dY
+         */
+        public void computeDeltas() {
+            dX = x - lastX;
+            dY = y - lastY;
+        }
+    }
 	
-	
-	
-	/**
-     * 		Store all the strokes that make up the drawing into a array
-     * 		so that I can iterate through them later to draw
+    /**
+     * First touch status
      */
-	public ArrayList<Stroke> strokeList = new ArrayList<Stroke>();
-	
-	
-	/**
-     * 		The stroke class
-     * 		
+    private Touch touch1 = new Touch();
+    
+    /**
+     * Second touch status
      */
-	public class Stroke{
-
-
-		/**
-	     * initial stroke color
-	     */
-	    public int strokeColor;
-	    
-	    
-	    /**
-	     * Initial stroke width
-	     */
-	    public float strokeWidth;
-	    
-	    /**
-	     * Array to store all the points making up the stroke
-	     */
-	    
-	    public ArrayList<Point> strokePoints = new ArrayList<Point>();
-		
-	}
-	
-	/**
-     * Point class
+    private Touch touch2 = new Touch();
+    
+    /**
+     * Paint to set when different color/line width is selected
      */
-	  public class Point {
-			float X;
-			float Y;
-		}
+    private Paint currentPaint;
+    
+    // holds the current paint when switching to eraser
+    private Paint tempPaint;
+    
+    // the eraser width
+    float eraserWidth = (float)4;
+    
+    Boolean eraserOn = false;
+    
+    private boolean isEditable = true;
 
+	// this list contains all the Drawings that should be shown in the view
+	//private ArrayList<Drawing> drawings = new ArrayList<Drawing>();
+    
+    /**
+     * The picture we are drawing
+     */
+	private Picture picture = new Picture();
+	
+	private transient Drawing currentDrawing = null;
+	
 	public DrawingView(Context context) {
 		super(context);
 		init(context);
-		// TODO Auto-generated constructor stub
 	}
 
 	public DrawingView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init(context);
-		// TODO Auto-generated constructor stub
 	}
 
 	public DrawingView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init(context);
-		// TODO Auto-generated constructor stub
 	}
-
+	
 	/**
      * Initialize the view
      * @param context
      */
     private void init(Context context) {
+<<<<<<< HEAD
     	drawing = new Drawing();
     	
     	stroke = new Stroke();
@@ -212,77 +142,71 @@ public class DrawingView extends View {
     	drawingPaint.setColor(color);
 
        
+=======
+    	initializeCurrentPaint(Color.BLACK, (float)4);
+>>>>>>> ce66aee400288f5369bac3bcc2a09fccaec1c22f
     }
-    
-    public void SetStrokeWidth(float width) { 
-    	//stroke.strokeWidth = width;
-		drawingPaint.setStrokeWidth(width);
-    }
-    
-    @Override
-	public void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
-		canvas.save();
-
-		canvas.translate(drawing.X, drawing.Y);
-		canvas.rotate(drawing.angle);
-		canvas.scale(drawing.scale, drawing.scale);
-		
-	
-		//Here, I'll iterate through the stroke, then the points of that stroke in order to daw
-		//Right now it's just going through the points, and always drawing line to (400, 100)
-		for (Stroke singleStroke : strokeList)
-		{
-			drawingPaint.setColor(singleStroke.strokeColor);
-			drawingPaint.setStrokeWidth(singleStroke.strokeWidth);
-			Point prevPoint = null;	
-			for (Point singlePoint : singleStroke.strokePoints)
-			{
-				if(prevPoint == null)
-				{
-					prevPoint = singlePoint;
-					canvas.drawPoint(prevPoint.X,  prevPoint.Y, drawingPaint);
-				}
-				else
-				{
-					canvas.drawLine(prevPoint.X,  prevPoint.Y, singlePoint.X, singlePoint.Y, drawingPaint);
-					prevPoint = singlePoint;
-				}
-			}
-			
-		}
-
-		canvas.restore();
-	}
     
     /**
-     * Handle a touch event
-     * @param event The touch event
+     * Create new paint
      */
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        int id = event.getPointerId(event.getActionIndex());
+    private void initializeCurrentPaint(int color, float width) {
+    	currentPaint = new Paint();
+        currentPaint.setColor(color);
+        currentPaint.setStrokeWidth(width);
+    }
+
+	@Override
+	protected void onDraw(Canvas canvas) {
+		super.onDraw(canvas);
+		
+		canvas.translate(picture.getOffsetX(), picture.getOffsetY());
+		
+		for (Drawing drawing : picture.getDrawings())
+			drawing.DrawLine(canvas);
+		if (currentDrawing != null) 
+			currentDrawing.DrawLine(canvas);
+		
+		canvas.scale(picture.getScale(), picture.getScale());
+	}
+
+	public Picture getPicture() {
+		return picture;
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		int id = event.getPointerId(event.getActionIndex());
         
         switch(event.getActionMasked()) {
         case MotionEvent.ACTION_DOWN:
-        	 touch1.id = id;
-             touch2.id = -1;
-             stroke = new Stroke();
-             stroke.strokeColor = drawingPaint.getColor();
-             stroke.strokeWidth = drawingPaint.getStrokeWidth();
-             getPositions(event);
-             touch1.copyToLast();
-             if(stroke.strokePoints.size() > 0)
-             {
-            	 strokeList.add(stroke);
-             }
-             return true;
+        	touch1.id = id;
+            touch2.id = -1;
+            getPositions(event);
+            touch1.copyToLast();
+        	if (isEditable) {
+	            // start new drawing, add to list of drawings
+	            currentDrawing = new Drawing();
+	            // set color and line width
+	            currentDrawing.setLinePaint(currentPaint);
+	            currentDrawing.addPoint(touch1.x, touch1.y);
+        	}
+        	picture.setOffsetX(picture.getOffsetX() + touch1.x - touch1.lastX);
+        	picture.setOffsetY(picture.getOffsetY() + touch1.y - touch1.lastY);
+        	return true;
             
         case MotionEvent.ACTION_POINTER_DOWN:
         	if(touch1.id >= 0 && touch2.id < 0) {
                 touch2.id = id;
                 getPositions(event);
                 touch2.copyToLast();
+                // finish current drawing, now rotating/scaling not drawing
+                if (currentDrawing != null)
+                {
+                	picture.AddDrawing(currentDrawing);
+                	currentDrawing = null;
+    	            invalidate();
+                }
                 return true;
             }
             break;
@@ -291,13 +215,18 @@ public class DrawingView extends View {
         case MotionEvent.ACTION_CANCEL:
         	touch1.id = -1;
             touch2.id = -1;
-            invalidate();
-            return true;
+            // finish current drawing
+            if (currentDrawing != null)
+            {
+            	picture.AddDrawing(currentDrawing);
+	            invalidate();
+            }
+	        return true;
             
         case MotionEvent.ACTION_POINTER_UP:
         	if(id == touch2.id) {
                 touch2.id = -1;
-            } 
+            }
         	else if(id == touch1.id) {
                 // Make what was touch2 now be touch1 by 
                 // swapping the objects.
@@ -311,14 +240,15 @@ public class DrawingView extends View {
             
         case MotionEvent.ACTION_MOVE:
         	getPositions(event);
-            if(getManipulation() || !getIsEditable()){
-            	rotateScale();
-            	move();
-            }
+        	if (touch2.id < 0 && currentDrawing != null) {
+        		currentDrawing.addPoint(touch1.x, touch1.y);
+        	}
+        	move();
             return true;
         }
         
         return super.onTouchEvent(event);
+<<<<<<< HEAD
     }
     
     public void addStroke(double x, double y) {
@@ -340,6 +270,10 @@ public class DrawingView extends View {
     }
     
 
+=======
+	}
+	
+>>>>>>> ce66aee400288f5369bac3bcc2a09fccaec1c22f
 	/**
      * Get the positions for the two touches and put them
      * into the appropriate touch objects.
@@ -351,59 +285,48 @@ public class DrawingView extends View {
             // Get the pointer id
             int id = event.getPointerId(i);
             
-            // Get coordinates
-            float x = event.getX(i);
-            float y = event.getY(i);
+            float x = event.getX(i); 
+            float y = event.getY(i); 
             
-            if(id == touch1.id) 
-            {
+            if(id == touch1.id) {
             	touch1.copyToLast();
                 touch1.x = x;
                 touch1.y = y;
-                //Store the location of each touch and push it into the array of points
-                //making up the stroke
-                if (touch2.id < 0 && getIsEditable() && !getManipulation())
-                {
-	                Point myPoint = new Point();
-	                
-	                // Compute the radians angle
-	                double rAngle = Math.toRadians(-drawing.angle);
-	                float ca = (float) Math.cos(rAngle);
-	                float sa = (float) Math.sin(rAngle);
-	                
-	                float tranRotX = (touch1.x - drawing.X)*ca - (touch1.y - drawing.Y)*sa;
-	                float tranRotY = (touch1.x - drawing.X)*sa + (touch1.y - drawing.Y)*ca;		
-	                
-	                myPoint.X =  tranRotX/drawing.scale;
-	                myPoint.Y = tranRotY/drawing.scale;
-	                
-	                stroke.strokePoints.add(myPoint);
-                }
-                
-            } 
-            else if(id == touch2.id) 
-            {
+            } else if(id == touch2.id) {
             	touch2.copyToLast();
-                touch2.x = x;
+            	touch2.x = x;
                 touch2.y = y;
             }
         }
         
         invalidate();
     }
-
-    private void rotateScale() {
-    	boolean stop = false;
-    	if(getIsEditable() && !getManipulation())
-    	{
-    		stop = true;
-    	}
-    	if(touch2.id < 0 || touch1.id < 0 || stop) { 
+    
+    /**
+     * Handle movement of the touches
+     */
+    private void move() {
+    	// If no touch1, we have nothing to do
+        // This should not happen, but it never hurts
+        // to check.
+        if(touch1.id < 0) { 
             return;
         }
-    	else
-    	{
-    		// Two touches
+        
+    	if (touch1.id >= 0 && !isEditable) {
+    		// Moving
+    		touch1.computeDeltas();
+    		
+    		// for moving
+    		picture.setOffsetX(picture.getOffsetX() + touch1.dX);
+            picture.setOffsetY(picture.getOffsetY() + touch1.dY);
+    	}
+
+        // when one finger is down we want to draw, not move.
+    	// so, do not do anything unless two fingers are down
+        if(touch1.id >= 0 && touch2.id >= 0) {
+            // Two touches
+        	touch1.computeDeltas();
             
             /*
              * Rotation
@@ -416,48 +339,30 @@ public class DrawingView extends View {
             /*
              * Scaling
              */
-            float dist1 = distance(touch1.lastX, touch1.lastY, touch2.lastX, touch2.lastY);
-            float dist2 = distance(touch1.x, touch1.y, touch2.x, touch2.y);
-            drawing.scale *= dist2/dist1;
-    	}
-		
-	}
-    
-    /**
-     * Handle movement of the touches
-     */
-    private void move() {  
-        if(touch1.id >= 0) {
-            // 1 touch
-            // We are moving
-            touch1.computeDeltas();
+            float distLast = length(touch1.lastX, touch1.lastY, touch2.lastX, touch2.lastY);
+            float distNow = length(touch1.x, touch1.y, touch2.x, touch2.y);
             
-            drawing.X += touch1.dX;
-            drawing.Y += touch1.dY;
-        }
-        else{
-        	return;
+            scale(distNow / distLast, touch1.x, touch1.y);
         }
     }
-
-	/**
+    
+    /**
      * Rotate the image around the point x1, y1
      * @param dAngle Angle to rotate in degrees
      * @param x1 rotation point x
      * @param y1 rotation point y
      */
     public void rotate(float dAngle, float x1, float y1) {
-        drawing.angle += dAngle;
-        
+        picture.setAngle(picture.getAngle() + dAngle);
+    	
         // Compute the radians angle
         double rAngle = Math.toRadians(dAngle);
         float ca = (float) Math.cos(rAngle);
         float sa = (float) Math.sin(rAngle);
-        float xp = (drawing.X - x1) * ca - (drawing.Y - y1) * sa + x1;
-        float yp = (drawing.X - x1) * sa + (drawing.Y - y1) * ca + y1;
 
-        drawing.X = xp;
-        drawing.Y = yp;
+        // do the rotation operations to each point in each Drawing in Drawings
+        for (Drawing drawing : picture.getDrawings())
+			drawing.RotateDrawing(ca,sa,x1,y1);
     }
     
     /**
@@ -471,142 +376,145 @@ public class DrawingView extends View {
     private float angle(float x1, float y1, float x2, float y2) {
         float dx = x2 - x1;
         float dy = y2 - y1;
-      
         return (float) Math.toDegrees(Math.atan2(dy, dx));
-        
     }
-    
+
     /**
-     * Determine the angle for two touches
+     * Determine the length for two touches
      * @param x1 Touch 1 x
      * @param y1 Touch 1 y
      * @param x2 Touch 2 x
      * @param y2 Touch 2 y
-     * @return computed angle in degrees
+     * @return computed length in pixels
      */
-    private float distance(float x1, float y1, float x2, float y2) {
-        float dx = x2 - x1;
-        float dy = y2 - y1;
-        return (float) Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+    private float length(float x1, float y1, float x2, float y2) {        
+    	float dx = x2 - x1;
+    	float dy = y2 - y1;
+    	return (float)Math.sqrt(dx * dx + dy * dy);
     }
     
-    /**
+    public void scale(float scale, float x1, float y1) {
+    	picture.setScale(picture.getScale() * scale);
+    	
+    	// do the rotation operations to each point in each Drawing in Drawings
+        for (Drawing drawing : picture.getDrawings())
+			drawing.ScaleDrawing(scale,x1,y1);	
+    }
+    
+	public int getCurrentPaintColor() {
+		return currentPaint.getColor();
+	}
+
+	public void setCurrentPaintColor(int color) {
+		initializeCurrentPaint(color, currentPaint.getStrokeWidth());
+	}
+    
+	public float getCurrentPaintWidth() {
+		return currentPaint.getStrokeWidth();
+	}
+	
+	
+	public int getPencilPaintColor() {
+		if (eraserOn) {
+			return tempPaint.getColor();
+		}
+		else
+			return currentPaint.getColor();
+	}
+
+	public void setPencilPaintColor(int color) {
+		if (eraserOn) {
+			tempPaint.setColor(color);
+		}
+		else
+			currentPaint.setColor(color);
+	}
+	
+	public void setPencilPaintWidth(float width) {
+		if (eraserOn) {
+			tempPaint.setStrokeWidth(width);
+		}
+		else
+			currentPaint.setStrokeWidth(width);
+	}
+	
+    
+	public float getPencilPaintWidth() {
+		if (eraserOn) {
+			return tempPaint.getStrokeWidth();
+		}
+		else
+			return currentPaint.getStrokeWidth();
+	}
+	
+	public boolean getEditable() {
+		return isEditable;
+	}
+	
+	public void setEditable(boolean b) {
+		isEditable = b;
+	}
+
+	public void setCurrentPaintWidth(float width) {
+		initializeCurrentPaint(currentPaint.getColor(), width);
+	}
+	
+	/**
+	 * Alex's successful attempts at serializing picture
+	 */
+	public void putDrawings(Intent intent) {
+		intent.putExtra("PICTURE", picture);
+	}
+	
+	public void getDrawings(Intent intent) {
+		if (intent.getSerializableExtra("PICTURE") != null) {
+			picture = (Picture)intent.getSerializableExtra("PICTURE");
+		}
+	}
+	
+	/**
      * Save the view state to a bundle
      * @param key key name to use in the bundle
      * @param bundle bundle to save to
      */
     public void putToBundle(String key, Bundle bundle) {
-    	bundle.putSerializable(key, drawing);
-    	int strokeCnt = 0;
-    	for(Stroke singleStroke : strokeList){
-	    	float[] simpleStroke = new float[singleStroke.strokePoints.size() * 4];
-	    	for( int i = 0; i < singleStroke.strokePoints.size(); i++)
-	    	{
-	    		simpleStroke[i*4] = singleStroke.strokePoints.get(i).X;
-	    		simpleStroke[i*4+1] = singleStroke.strokePoints.get(i).Y;
-	    		simpleStroke[i*4+2] = singleStroke.strokeColor;
-	    		simpleStroke[i*4+3] = singleStroke.strokeWidth;
-	    	}
-	    	bundle.putFloatArray(STROKE + strokeCnt, simpleStroke);
-	    	
-	    	strokeCnt++;
-    	}
-    	bundle.putInt("numberOfStrokes", strokeCnt-1);
+    	bundle.putSerializable(key, picture);
     }
+    
     /**
      * Get the view state from a bundle
      * @param key key name to use in the bundle
      * @param bundle bundle to load from
      */
     public void getFromBundle(String key, Bundle bundle) {
-    	if(key == "drawing"){
-    	drawing = (Drawing)bundle.getSerializable(key);
-    	}
-    	else{
-    		strokeList = new ArrayList<Stroke>();
-    		int total = (int)bundle.getInt("numberOfStrokes")+1;
-    		for(int y = 0; y< total; y++)
-    		{   			
-		    	float[] strokeFound = (float[])bundle.getFloatArray(key + y);
-		    	if(strokeFound!= null)
-		    	{
-		    		stroke = new Stroke();
-	    			//stroke.strokeColor = drawingPaint.getColor();
-	               // stroke.strokeWidth = drawingPaint.getStrokeWidth();
-	                
-			    	for( int i = 0; i < strokeFound.length/4; i++)
-			    	{
-			    		Point pointFound = new Point();
-			    		pointFound.X = (float)strokeFound[i*4];
-			    		pointFound.Y = (float)strokeFound[i*4 +1];
-			    		stroke.strokeColor = (int) strokeFound[i*4+2];
-			    		stroke.strokeWidth = (float)strokeFound[i*4+3];
-			    		stroke.strokePoints.add(pointFound);
-			    		
-			    	}
-			    	if(stroke.strokePoints.size() > 0)
-			        {
-			    		strokeList.add(stroke);
-			        }
-		    	}
-    		}
-    	}
-        
+    	picture = (Picture)bundle.getSerializable(key);
+    }
+
+	public float getEraserWidth() {
+		return eraserWidth;
+	}
+
+	public void setEraserWidth(float eraserWidth) {
+		this.eraserWidth = eraserWidth;
+		if (eraserOn)
+			initializeCurrentPaint(Color.WHITE, eraserWidth);
+	}
+    
+    public void switchToEraser() {
+    	tempPaint = currentPaint;
+    	initializeCurrentPaint(Color.WHITE, eraserWidth);
+    	eraserOn = true;
     }
     
-    /**
-     * Save the view state to an intent
-     * @param key key name to use in the bundle
-     * @param bundle bundle to save to
-     */
-    public void putExtraToIntent(String key, Intent intent) {
-    	intent.putExtra(key, drawing);
-    	int strokeCnt = 0;
-    	for(Stroke singleStroke : strokeList){
-	    	float[] simpleStroke = new float[singleStroke.strokePoints.size() * 4];
-	    	for( int i = 0; i < singleStroke.strokePoints.size(); i++)
-	    	{
-	    		simpleStroke[i*4] = singleStroke.strokePoints.get(i).X;
-	    		simpleStroke[i*4+1] = singleStroke.strokePoints.get(i).Y;
-	    		simpleStroke[i*4+2] = singleStroke.strokeColor;
-	    		simpleStroke[i*4+3] = singleStroke.strokeWidth;
-	    	}
-	    	intent.putExtra(STROKE + strokeCnt, simpleStroke);
-	    	
-	    	strokeCnt++;
+    public void switchToPencil() {
+    	if(tempPaint != null) {
+    		currentPaint = tempPaint;
     	}
-    	intent.putExtra("numberOfStrokes", strokeCnt-1);
+    	eraserOn = false;
     }
-
-	public void setEditable(boolean edit) {
-		editable = edit;
-		
-	}
-	
-	public boolean getIsEditable() {
-		return editable;
-		
-	}
-
-	public void setManipulation(boolean manipulate) {
-		drawing.manipulateDrawing = manipulate;
-		
-		
-	}
-	
-	public boolean getManipulation() {
-		return drawing.manipulateDrawing;
-		
-	}
-
-	public void setAllDrawing(Serializable drawingObj, ArrayList<Stroke> listofStrokes) {
-		if(drawingObj != null){
-	    	drawing = (Drawing)drawingObj;
-	    	}
-
-		strokeList = listofStrokes;
-		
-	}
-	
-
+    
+    public void setPicture(Picture pic)
+    {
+    	picture = pic;
+    }
 }
