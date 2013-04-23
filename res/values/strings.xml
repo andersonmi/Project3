@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Project3</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="pensize">Pen Size</string>
+    <string name="colorPicker">Color</string>
+    <string name="done">Done</string>
+    <string name="title_activity_color_select">Select Color</string>
+
+</resources>
