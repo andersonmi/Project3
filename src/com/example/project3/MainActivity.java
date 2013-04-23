@@ -26,6 +26,9 @@ public class MainActivity extends Activity {
     
     private double latitude;
     private double longitude;
+    
+    private double initLat = 0;
+    private double initLon = 0;
 	
 	private static final int GOT_COLOR = 1;
 	
@@ -90,7 +93,7 @@ public class MainActivity extends Activity {
 		    if(requestCode == GOT_COLOR && resultCode == Activity.RESULT_OK) {
 			    // This is a color response
 			    int color = data.getIntExtra(ColorSelectActivity.COLOR, Color.BLACK);
-			    drawingView.SetStrokeColor(color);
+			    drawingView.setCurrentPaintColor(color);
 		    }
 		}
 
@@ -144,6 +147,12 @@ public class MainActivity extends Activity {
        
        latitude = location.getLatitude();
        longitude = location.getLongitude();
+       
+       if (initLat == 0) initLat = latitude;
+       if (initLon == 0) initLon = longitude;
+       
+       //Send to drawing to draw
+       //drawingView.addStroke(latitude-initLat, longitude-initLon);
        
        setUI();
        
