@@ -165,8 +165,6 @@ public class MainActivity extends Activity {
        
        if(bestAvailable != null) {
            locationManager.requestLocationUpdates(bestAvailable, 500, 1, activeListener);
-           //TextView viewProvider = (TextView)findViewById(R.id.textProvider);
-         //  viewProvider.setText(bestAvailable);
            Location location = locationManager.getLastKnownLocation(bestAvailable);
            onLocation(location);
        }
