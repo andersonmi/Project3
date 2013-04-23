@@ -206,7 +206,7 @@ public class MainActivity extends Activity {
     		   accelListener = new AccelListener();
     		   sensorManager.registerListener(accelListener,
     		   accelSensor,
-    		   SensorManager.SENSOR_DELAY_GAME);
+    		   SensorManager.SENSOR_DELAY_FASTEST);
     		   }
    }
    
@@ -242,9 +242,12 @@ public class MainActivity extends Activity {
 	   }
 	   @Override
 	   public void onSensorChanged(SensorEvent event) {
-		   float x = event.values[0];
 		   float y = event.values[1];
-		   float z = event.values[2];
+		   if(y == 0) {
+			   
+		   } else {
+			   
+		   }
 	   }	
    }
 
