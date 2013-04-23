@@ -200,7 +200,7 @@ public class DrawingView extends View {
     	
     	stroke = new Stroke();
     	stroke.strokeColor = Color.BLACK;
-    	stroke.strokeWidth = 8;
+    	stroke.strokeWidth = 16;
     	
         drawingPaint = new Paint();
         drawingPaint.setColor(stroke.strokeColor);
@@ -319,6 +319,24 @@ public class DrawingView extends View {
         }
         
         return super.onTouchEvent(event);
+    }
+    
+    public void addStroke(double x, double y) {
+    	Point myPoint = new Point();
+        
+    	/*
+        // Compute the radians angle
+        double rAngle = Math.toRadians(-drawing.angle);
+        float ca = (float) Math.cos(rAngle);
+        float sa = (float) Math.sin(rAngle);
+        
+        float tranRotX = (touch1.x - drawing.X)*ca - (touch1.y - drawing.Y)*sa;
+        float tranRotY = (touch1.x - drawing.X)*sa + (touch1.y - drawing.Y)*ca;		*/
+        
+        myPoint.X =  (float) x;//tranRotX/drawing.scale;
+        myPoint.Y = (float) y; //tranRotY/drawing.scale;
+        
+        stroke.strokePoints.add(myPoint);
     }
     
 
