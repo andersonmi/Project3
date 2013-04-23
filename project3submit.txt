@@ -5,32 +5,32 @@ Group Name:   Dragons
 
 When you have completed the project, complete the following form and include it with your project. Include this file as a text file in the folder with your project when you turn it in. 
 
-Project Name:  (please enter)
+Project Name:  Project 3
 
-Project Description:  (please enter)
-
-
-Member 1: 
-
-Responsiblity:
+Project Description:  Big Draw
 
 
+Member 1: David Ward
 
-Member 2: 
-
-Responsiblity:
+Responsibility:	Accelerometer with width
 
 
 
-Member 3: 
+Member 2:     Benjamin Szymcazk
 
-Responsiblity:
+Responsibility: GPS Setup
 
 
 
-Member 4 (if applicable): 
+Member 3:     Anthony D'onforio
 
-Responsiblity:
+Responsibility:	Drawing with GPS
+
+
+
+Member 4 (if applicable): Michael Anderson
+
+Responsibility:	Setup views & activities
 
 
 
