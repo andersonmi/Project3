@@ -90,7 +90,7 @@ public class MainActivity extends Activity {
 		    if(requestCode == GOT_COLOR && resultCode == Activity.RESULT_OK) {
 			    // This is a color response
 			    int color = data.getIntExtra(ColorSelectActivity.COLOR, Color.BLACK);
-			    drawingView.SetStrokeColor(color);
+			    drawingView.setCurrentPaintColor(color);
 		    }
 		}
 
