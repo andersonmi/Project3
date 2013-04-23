@@ -34,4 +34,14 @@
         android:paddingRight="25dp"
         android:text="@string/done" />
 
+    <TextView
+        android:id="@+id/curLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/colorPicker"
+        android:layout_alignBottom="@+id/colorPicker"
+        android:layout_centerHorizontal="true"
+        android:text="@string/dummy"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
 </RelativeLayout>

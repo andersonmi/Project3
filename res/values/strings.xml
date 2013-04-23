@@ -8,5 +8,6 @@
     <string name="colorPicker">Color</string>
     <string name="done">Done</string>
     <string name="title_activity_color_select">Select Color</string>
+    <string name="dummy">DUMMY</string>
 
 </resources>
