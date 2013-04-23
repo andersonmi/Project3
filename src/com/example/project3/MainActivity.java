@@ -9,6 +9,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -31,6 +35,9 @@ public class MainActivity extends Activity {
 	private DrawingView drawingView;
 	private TextView currentLocation;
 	
+	private Sensor accelSensor = null;
+	private AccelListener accelListener = null;	
+	private SensorManager sensorManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -178,6 +185,11 @@ public class MainActivity extends Activity {
    protected void onPause() {
        unregisterListeners();
        super.onPause();
+       if(accelSensor != null) {
+    	   sensorManager.unregisterListener(accelListener);
+    	   accelListener = null;
+    	   accelSensor = null;
+    	   }
    }
 
    /**
@@ -187,6 +199,15 @@ public class MainActivity extends Activity {
    protected void onResume() {
        super.onResume();
        registerListeners();
+       sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+       accelSensor =
+    		   sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+    		   if(accelSensor != null) {
+    		   accelListener = new AccelListener();
+    		   sensorManager.registerListener(accelListener,
+    		   accelSensor,
+    		   SensorManager.SENSOR_DELAY_GAME);
+    		   }
    }
    
    
@@ -214,6 +235,17 @@ public class MainActivity extends Activity {
 
        
    };
-	
+   
+   private class AccelListener implements SensorEventListener {
+	   @Override
+	   public void onAccuracyChanged(Sensor arg0, int arg1) {
+	   }
+	   @Override
+	   public void onSensorChanged(SensorEvent event) {
+		   float x = event.values[0];
+		   float y = event.values[1];
+		   float z = event.values[2];
+	   }	
+   }
 
 }
