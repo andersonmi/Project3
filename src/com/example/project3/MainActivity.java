@@ -252,10 +252,10 @@ public class MainActivity extends Activity {
 	   @Override
 	   public void onSensorChanged(SensorEvent event) {
 		   float y = event.values[1];
-		   if(y == 0) {
-			   
+		   if(y <= 0) {
+			   drawingView.setCurrentPaintWidth(0);
 		   } else {
-			   
+			   drawingView.setCurrentPaintWidth(40 / y);
 		   }
 	   }	
    }
