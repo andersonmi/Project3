@@ -139,7 +139,7 @@ public class MainActivity extends Activity {
 	
 	private void setUI() {
 		Log.i("ONLOCATION", "New location registered");
-		currentLocation.setText("(" + latitude + ", " + longitude + ")");
+		//currentLocation.setText("(" + latitude + ", " + longitude + ")");
 	}
 	
 	   
@@ -155,8 +155,8 @@ public class MainActivity extends Activity {
        if (initLon == 0) initLon = longitude;
        
        //Send to drawing to draw
-       Log.i("MEOW", "Lat: " + (latitude-initLat)* 1000 + " Lon: " +  (longitude-initLon)* 1000);
-       drawingView.addStroke((latitude-initLat) * 10000 + 400, (longitude-initLon) * 10000 + 500);
+       Log.i("MEOW", "Lat: " + (latitude-initLat)* 100000 + " Lon: " +  (longitude-initLon)* 100000);
+       drawingView.addStroke((latitude-initLat) * 100000 + 400, (longitude-initLon) * 100000 + 500);
        
        setUI();
        
@@ -256,10 +256,11 @@ public class MainActivity extends Activity {
 	   @Override
 	   public void onSensorChanged(SensorEvent event) {
 		   float y = event.values[1];
+		   currentLocation.setText("(" + y + ")");
 		   if(y <= 0) {
 			   drawingView.setCurrentPaintWidth(0);
 		   } else {
-			   drawingView.setCurrentPaintWidth(40 / y);
+			   drawingView.setCurrentPaintWidth(80 - y * 9);
 		   }
 	   }	
    }

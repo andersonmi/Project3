@@ -448,7 +448,7 @@ public class DrawingView extends View {
 			isEditable = false;
 		else
 			isEditable = true;
-		if (width > 40) width = 40;
+
 		initializeCurrentPaint(currentPaint.getColor(), width);
 	}
 	
