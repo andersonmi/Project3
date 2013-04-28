@@ -163,7 +163,6 @@ public class DrawingView extends View {
             Log.i("YOUR GPS", "X: " + (float)x + " Y: " + (float)y);
             
             if (currentDrawing != null) {
-            	currentDrawing.setLinePaint(currentPaint);
                 
                 currentDrawing.addPoint((float)x, (float)y);
                 
@@ -171,24 +170,23 @@ public class DrawingView extends View {
                 
                 currentDrawing = new Drawing();
                 currentDrawing.addPoint((float) x, (float)y);
+                currentDrawing.setLinePaint(currentPaint);
             } else {
             	currentDrawing = new Drawing();
             	currentDrawing.setLinePaint(currentPaint);
                 
                 currentDrawing.addPoint((float)x, (float)y);
             }
-            	
-            
-            
-           
     	}
     	invalidate();
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+		boolean x = false;
+		if (x) {
 		int id = event.getPointerId(event.getActionIndex());
-        
+		
         switch(event.getActionMasked()) {
         case MotionEvent.ACTION_DOWN:
         	touch1.id = id;
@@ -259,6 +257,7 @@ public class DrawingView extends View {
         	move();
             return true;
         }
+		}
         
         return super.onTouchEvent(event);
 	}
@@ -445,6 +444,11 @@ public class DrawingView extends View {
 	}
 
 	public void setCurrentPaintWidth(float width) {
+		if (width == 0)
+			isEditable = false;
+		else
+			isEditable = true;
+		if (width > 40) width = 40;
 		initializeCurrentPaint(currentPaint.getColor(), width);
 	}
 	
