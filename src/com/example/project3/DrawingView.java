@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.graphics.Canvas;
@@ -154,6 +155,35 @@ public class DrawingView extends View {
 	public Picture getPicture() {
 		return picture;
 	}
+	
+	public void addStroke(double x, double y) {
+        touch1.copyToLast();
+
+    	if (isEditable) {
+            Log.i("YOUR GPS", "X: " + (float)x + " Y: " + (float)y);
+            
+            if (currentDrawing != null) {
+            	currentDrawing.setLinePaint(currentPaint);
+                
+                currentDrawing.addPoint((float)x, (float)y);
+                
+                picture.AddDrawing(currentDrawing);
+                
+                currentDrawing = new Drawing();
+                currentDrawing.addPoint((float) x, (float)y);
+            } else {
+            	currentDrawing = new Drawing();
+            	currentDrawing.setLinePaint(currentPaint);
+                
+                currentDrawing.addPoint((float)x, (float)y);
+            }
+            	
+            
+            
+           
+    	}
+    	invalidate();
+	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
@@ -171,6 +201,7 @@ public class DrawingView extends View {
 	            // set color and line width
 	            currentDrawing.setLinePaint(currentPaint);
 	            currentDrawing.addPoint(touch1.x, touch1.y);
+	            Log.i("YOUR TOUCH", "X: " + touch1.x + " Y: " + touch1.y);
         	}
         	picture.setOffsetX(picture.getOffsetX() + touch1.x - touch1.lastX);
         	picture.setOffsetY(picture.getOffsetY() + touch1.y - touch1.lastY);
@@ -223,6 +254,7 @@ public class DrawingView extends View {
         	getPositions(event);
         	if (touch2.id < 0 && currentDrawing != null) {
         		currentDrawing.addPoint(touch1.x, touch1.y);
+        		 Log.i("YOUR TOUCH", "X: " + touch1.x + " Y: " + touch1.y);
         	}
         	move();
             return true;

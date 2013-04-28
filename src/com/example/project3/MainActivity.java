@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -47,6 +48,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN); 
+		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		
 		locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		
@@ -126,6 +128,7 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onSaveInstanceState(outState);
 		
+		
 		drawingView.putToBundle(DRAWING, outState);
 	}
 	
@@ -152,7 +155,8 @@ public class MainActivity extends Activity {
        if (initLon == 0) initLon = longitude;
        
        //Send to drawing to draw
-       //drawingView.addStroke(latitude-initLat, longitude-initLon);
+       Log.i("MEOW", "Lat: " + (latitude-initLat)* 1000 + " Lon: " +  (longitude-initLon)* 1000);
+       drawingView.addStroke((latitude-initLat) * 10000 + 400, (longitude-initLon) * 10000 + 500);
        
        setUI();
        
